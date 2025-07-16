@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Modulator.h"
+#include "proc/WaveformBuffer.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {
@@ -39,10 +40,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     float getBusLevel(int bus) const;
+    const invrm::WaveformBuffer& getWaveformBuffer() const { return waveformBuffer; }
 
 private:
     std::unique_ptr<invrm::Modulator> mModulator;
     std::atomic<std::array<float, 2>> mBusLevels;
+    invrm::WaveformBuffer waveformBuffer;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

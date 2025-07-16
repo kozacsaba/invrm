@@ -27,6 +27,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     //majd ha lesz prefilter
 
     mBusLevels = {0.f, 0.f};
+    waveformBuffer.prepareToPlay(sampleRate);
 }
 void PluginProcessor::releaseResources()
 {
