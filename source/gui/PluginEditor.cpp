@@ -7,7 +7,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     , processorRef (p)
     , mWaveformDisplay (processorRef.getWaveformBuffer())
 {
-    invrm::VUBar::setUpdateFrequency(25.f);
+    invrm::VUBar::setUpdateFrequency(25);
     addAndMakeVisible(mBarIn);
     mBarIn.query = [this]() -> float
     {

@@ -122,7 +122,8 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 
 float PluginProcessor::getBusLevel(int bus) const
 {
-    return mBusLevels.load()[bus];
+    jassert(bus < 2);
+    return mBusLevels.load()[(size_t)bus];
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

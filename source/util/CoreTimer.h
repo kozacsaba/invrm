@@ -14,7 +14,7 @@ public:
     UpdatableBase();
     ~UpdatableBase();
 
-    static void setUpdateFrequency(float frequencyInHz);
+    static void setUpdateFrequency(int frequencyInHz);
 
     virtual void timedUpdate() = 0;
 }; // UpdatableBase
@@ -25,7 +25,7 @@ class CoreTimer
 {
 public:
     CoreTimer();
-    ~CoreTimer();
+    ~CoreTimer() override;
 
     void timerCallback() override;
 

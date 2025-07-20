@@ -9,9 +9,9 @@ class WaveformBuffer
 {
 public:
     WaveformBuffer()
-        : writeIndex(0)
-        , minValues(numPoints, 0.0f)
-        , maxValues(numPoints, 0.0f)
+        : minValues((size_t)numPoints, 0.0f)
+        , maxValues((size_t)numPoints, 0.0f)
+        , writeIndex(0)
     {
     }
 
@@ -44,8 +44,8 @@ public:
 
             if (++sampleCounter >= samplesPerPoint)
             {
-                minValues[writeIndex] = currentMin;
-                maxValues[writeIndex] = currentMax;
+                minValues[(size_t)writeIndex] = currentMin;
+                maxValues[(size_t)writeIndex] = currentMax;
 
                 writeIndex = (writeIndex + 1) % numPoints;
                 sampleCounter = 0;
@@ -56,9 +56,9 @@ public:
     }
     void getData(std::vector<float>& outMin, std::vector<float>& outMax) const
     {
-        for (int i = 0; i < numPoints; ++i)
+        for (size_t i = 0; i < (size_t)numPoints; ++i)
         {
-            int index = (writeIndex + i) % numPoints;
+            const size_t index = ((size_t)writeIndex + i) % (size_t)numPoints;
             outMin[i] = minValues[index];
             outMax[i] = maxValues[index];
         }

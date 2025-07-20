@@ -17,8 +17,8 @@ public:
     WaveformDisplay(const WaveformBuffer& sourceBuffer)
         : buffer(sourceBuffer)
     {
-        min.resize(buffer.getNumPoints(), 0.0f);
-        max.resize(buffer.getNumPoints(), 0.0f);
+        min.resize((size_t)buffer.getNumPoints(), 0.0f);
+        max.resize((size_t)buffer.getNumPoints(), 0.0f);
     }
 
     void timedUpdate() override
@@ -40,10 +40,10 @@ public:
 
         for (int i = 0; i < numPoints; ++i)
         {
-            const float minY = juce::jmap(min[i], -1.0f, 1.0f, (float)h, 0.0f);
-            const float maxY = juce::jmap(max[i], -1.0f, 1.0f, (float)h, 0.0f);
+            const float minY = juce::jmap(min[(size_t)i], -1.0f, 1.0f, (float)h, 0.0f);
+            const float maxY = juce::jmap(max[(size_t)i], -1.0f, 1.0f, (float)h, 0.0f);
 
-            const float initX = i * columnWidth;
+            const float initX = float(i) * columnWidth;
             const float initY = maxY;
             const float rectW = columnWidth;
             const float rectH = minY - maxY;
