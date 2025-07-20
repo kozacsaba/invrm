@@ -40,12 +40,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     float getBusLevel(int bus) const;
-    const invrm::WaveformBuffer& getWaveformBuffer() const { return waveformBuffer; }
+    const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
 
 private:
     std::unique_ptr<invrm::Modulator> mModulator;
     std::atomic<std::array<float, 2>> mBusLevels;
-    invrm::WaveformBuffer waveformBuffer;
+    invrm::WaveformBuffer mWaveformBuffer;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

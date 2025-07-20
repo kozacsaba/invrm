@@ -43,9 +43,12 @@ public:
             const float minY = juce::jmap(min[i], -1.0f, 1.0f, (float)h, 0.0f);
             const float maxY = juce::jmap(max[i], -1.0f, 1.0f, (float)h, 0.0f);
 
-            g.fillRect(juce::Rectangle<float>(
-                i * columnWidth, minY,
-                columnWidth, maxY - minY));
+            const float initX = i * columnWidth;
+            const float initY = maxY;
+            const float rectW = columnWidth;
+            const float rectH = minY - maxY;
+
+            g.fillRect(juce::Rectangle<float>(initX, initY, rectW, rectH));
         }
     }
 
