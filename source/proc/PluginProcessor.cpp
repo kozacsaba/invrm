@@ -28,6 +28,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     mBusLevels = {0.f, 0.f};
     mWaveformBuffer.prepareToPlay(sampleRate);
+    mModulator->prepareToPlay(samplesPerBlock);
 }
 void PluginProcessor::releaseResources()
 {
@@ -63,8 +64,6 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 {
     juce::ScopedNoDenormals noDenormals;
     juce::ignoreUnused (midiMessages);
-
-    mWaveformBuffer.pushBuffer(buffer);
 
     const auto& mainBus = getBusBuffer(buffer, true, 0);
     const float rmsLeft = mainBus.getRMSLevel(0, 0, mainBus.getNumSamples());
@@ -102,6 +101,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         
         mModulator->processBlock(pin, pout, pside, len);
     }
+
+    mWaveformBuffer.pushBuffer(mModulator->getFactorArray());
 }
 
 

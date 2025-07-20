@@ -16,9 +16,15 @@ void Modulator::processBlock (const float* mainIn,
         factor *= mPregain;
         factor = std::max(0.f, factor - mThreshold);
         factor = std::max(0.f, 1.f - factor);
+        mFactorArray.setSample(0, s, factor);
 
         mainOut[s] = factor * mainIn[s];
     }
+}
+
+void Modulator::prepareToPlay(int maxBlockSize)
+{
+    mFactorArray.setSize(1, maxBlockSize);
 }
 
 void Modulator::setPregain(float pregain)
