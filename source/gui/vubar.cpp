@@ -21,7 +21,8 @@ void VUBar::paint(juce::Graphics& g)
 {
     g.setColour(juce::Colours::black);
     g.fillRect(barArea);
-    const auto filledArea = barArea.withHeight(barArea.getHeight() * barValue);
+    const float newH = (float)barArea.getHeight() * barValue;
+    const auto filledArea = barArea.withHeight((int)newH);
     g.setColour(juce::Colours::white);
     g.fillRect(filledArea);
 }

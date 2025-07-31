@@ -13,7 +13,7 @@ UpdatableBase::~UpdatableBase()
     CoreTimer::getInstance()->deregisterUpdatable(this);
 }
 
-void UpdatableBase::setUpdateFrequency(float f)
+void UpdatableBase::setUpdateFrequency(int f)
 {
     CoreTimer::getInstance()->startTimerHz(f);
 }
@@ -44,11 +44,11 @@ bool CoreTimer::registerUpdatable(UpdatableBase* b)
 
 bool CoreTimer::deregisterUpdatable(UpdatableBase* b)
 {
-    for(int i = 0; i < mComponents.size(); i++)
+    for(size_t i = 0; i < mComponents.size(); i++)
     {
         if(b == mComponents[i])
         {
-            mComponents.erase(mComponents.begin() + i);
+            mComponents.erase(mComponents.begin() + (long long)i);
             return true;
         }
     }

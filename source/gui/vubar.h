@@ -18,7 +18,7 @@ class VUBar
 {
 public:
     VUBar();
-    ~VUBar();
+    ~VUBar() override;
 
     void timedUpdate() override;
 

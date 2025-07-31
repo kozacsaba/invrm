@@ -27,6 +27,8 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     //majd ha lesz prefilter
 
     mBusLevels = {0.f, 0.f};
+    mWaveformBuffer.prepareToPlay(sampleRate);
+    mModulator->prepareToPlay(samplesPerBlock);
 }
 void PluginProcessor::releaseResources()
 {
@@ -60,6 +62,7 @@ bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                     juce::MidiBuffer& midiMessages)
 {
+    juce::ScopedNoDenormals noDenormals;
     juce::ignoreUnused (midiMessages);
 
     const auto& mainBus = getBusBuffer(buffer, true, 0);
@@ -67,22 +70,17 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     const float rmsRight = mainBus.getRMSLevel(1, 0, mainBus.getNumSamples());
     const float mainBusLevel = (rmsLeft + rmsRight) * 0.5f;
 
-    if (getBusCount(true) < 2)
-    {
-        mBusLevels.store({mainBusLevel, 0.f});
-    }
-
-    const auto& sideBus = getBusBuffer(buffer, true, 1);
-    const float rmsLefts = sideBus.getRMSLevel(0, 0, sideBus.getNumSamples());
-    const float rmsRights = sideBus.getRMSLevel(1, 0, sideBus.getNumSamples());
-    const float sideBusLevel = (rmsLefts + rmsRights) * 0.5f;
-    mBusLevels.store({mainBusLevel, sideBusLevel});
-
     juce::AudioBuffer<float> sidechain = getBusBuffer(buffer, true, 1);
     const int numSidechainChannels = sidechain.getNumChannels();
-    if (numSidechainChannels == 0) return;
-
-    juce::ScopedNoDenormals noDenormals;
+    if (numSidechainChannels == 0) 
+    {
+        mBusLevels.store({mainBusLevel, 0.f});
+        return;
+    }
+    const float rmsLefts = sidechain.getRMSLevel(0, 0, sidechain.getNumSamples());
+    const float rmsRights = sidechain.getRMSLevel(1, 0, sidechain.getNumSamples());
+    const float sideBusLevel = (rmsLefts + rmsRights) * 0.5f;
+    mBusLevels.store({mainBusLevel, sideBusLevel});
 
     auto numChannels  = std::min(
         getTotalNumInputChannels(),
@@ -103,6 +101,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         
         mModulator->processBlock(pin, pout, pside, len);
     }
+
+    mWaveformBuffer.pushBuffer(mModulator->getFactorArray());
 }
 
 
@@ -123,7 +123,8 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 
 float PluginProcessor::getBusLevel(int bus) const
 {
-    return mBusLevels.load()[bus];
+    jassert(bus < 2);
+    return mBusLevels.load()[(size_t)bus];
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

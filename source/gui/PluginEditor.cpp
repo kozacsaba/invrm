@@ -5,8 +5,9 @@
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p)
     , processorRef (p)
+    , mWaveformDisplay (processorRef.getWaveformBuffer())
 {
-    invrm::VUBar::setUpdateFrequency(25.f);
+    invrm::VUBar::setUpdateFrequency(25);
     addAndMakeVisible(mBarIn);
     mBarIn.query = [this]() -> float
     {
@@ -17,6 +18,8 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     {
         return processorRef.getBusLevel(1);
     };
+
+    addAndMakeVisible(mWaveformDisplay);
 
     setSize (400, 300);
 }
@@ -42,4 +45,5 @@ void PluginEditor::resized()
     auto area = getLocalBounds();
     mBarIn.setBounds(area.removeFromLeft(30));
     mBarOut.setBounds(area.removeFromRight(30));
+    mWaveformDisplay.setBounds(area.reduced(20));
 }
