@@ -9,6 +9,8 @@ PluginProcessor::PluginProcessor()
             .withOutput("Output", juce::AudioChannelSet::stereo(), true)
             .withInput("Sidechain", juce::AudioChannelSet::stereo(), false)
       )
+    , mApvts(*this, nullptr, "Parameters", invrm::param::CreateParameterLayout())
+    , mParams()
     , mModulator(std::make_unique<invrm::Modulator>())
 {
 #if LOG_LEVEL > 2

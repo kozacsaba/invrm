@@ -25,6 +25,7 @@ public:
 private:
     inline static float mPregain = 1.f;
     inline static float mThreshold = 0.f;
+    inline static float mWetMix = 1.f;
     juce::AudioBuffer<float> mFactorArray;
 
 };

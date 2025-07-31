@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Modulator.h"
 #include "proc/WaveformBuffer.h"
+#include "util/Parameters.h"
 
 class PluginProcessor final : public juce::AudioProcessor
 {
@@ -43,6 +44,9 @@ public:
     const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
 
 private:
+    APVTS mApvts;
+    std::vector<RAP*> mParams;
+
     std::unique_ptr<invrm::Modulator> mModulator;
     std::atomic<std::array<float, 2>> mBusLevels;
     invrm::WaveformBuffer mWaveformBuffer;
