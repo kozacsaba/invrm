@@ -40,13 +40,15 @@ inline juce::String toId(PID pid)
     return toId(toName(pid));
 }
 
-inline void createParam(UniqueRapVector& vec, PID pid)
+inline void createParam(UniqueRapVector& vec, 
+                        PID pid,
+                        juce::NormalisableRange<float> range,
+                        float defaultValue)
 {
     const auto valToStr = [](float val, int maxLen)
     {
         return juce::String(val, maxLen);
     };
-
     const auto strToVal = [](juce::String str)
     {
         return str.getFloatValue();
@@ -57,9 +59,8 @@ inline void createParam(UniqueRapVector& vec, PID pid)
 
     vec.push_back(std::make_unique<juce::AudioParameterFloat>
     (
-        id, name, 
-        juce::Range<float>(-100.f, 100.f),
-        0.f,
+        id, name, range,
+        defaultValue,
         "db",
         juce::AudioProcessorParameter::Category::genericParameter,
         valToStr,
@@ -71,9 +72,9 @@ inline APVTS::ParameterLayout CreateParameterLayout()
 {
     UniqueRapVector params;
 
-    createParam(params, PID::PreGain);
-    createParam(params, PID::Threshold);
-    createParam(params, PID::WetMix);
+    createParam(params, PID::PreGain, {-30.f, 30.f}, 0.f);
+    createParam(params, PID::Threshold, {-80.f, 0.f}, 0.f);
+    createParam(params, PID::WetMix, {0.f, 1.f}, 1.f);
 
     return {params.begin(), params.end()};
 }

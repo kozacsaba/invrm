@@ -11,12 +11,18 @@ PluginProcessor::PluginProcessor()
       )
     , mApvts(*this, nullptr, "Parameters", invrm::param::CreateParameterLayout())
     , mParams()
-    , mModulator(std::make_unique<invrm::Modulator>())
+    , mModulator(std::make_unique<invrm::Modulator>(this))
 {
 #if LOG_LEVEL > 2
     auto* logger = patch::FileLogger::getInstance();
     juce::ignoreUnused(logger);
 #endif
+
+    for(int i = 0; i < invrm::param::numParams; i++)
+    {
+        juce::StringRef id = invrm::param::toId(invrm::param::PID(i));
+        mParams.push_back(mApvts.getParameter(id));
+    }
 }
 PluginProcessor::~PluginProcessor()
 {

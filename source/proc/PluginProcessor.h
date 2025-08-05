@@ -42,6 +42,7 @@ public:
 
     float getBusLevel(int bus) const;
     const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
+    std::vector<RAP*>& getParameters() { return mParams; }
 
 private:
     APVTS mApvts;
