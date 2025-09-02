@@ -1,17 +1,20 @@
 #include "Modulator.h"
+#include "proc/PluginProcessor.h"
 
 #define UNPACK_PARAM(paramName)                                                 \
     const int paramName##PID = static_cast<int>(param::PID::paramName);         \
-    const float paramName##Norm = mParams[paramName##PID]->getValue();          \
-    const float paramName##Val = mParams[paramName##PID]                        \
+    const auto* paramName##Param = mProcessor->getParameters()[paramName##PID]; \
+    const float paramName##Norm = paramName##Param->get();                      \
+    const float paramName##Val = paramName##Param                               \
         ->getNormalisableRange()                                                \
         .convertFrom0to1(paramName##Norm);                                      \
     do {} while(false)
 
 #define UNPACK_DECIBEL(paramName)                                               \
     const int paramName##PID = static_cast<int>(param::PID::paramName);         \
-    const float paramName##Norm = mParams[paramName##PID]->getValue();          \
-    const float paramName##DB = mParams[paramName##PID]                         \
+    const auto* paramName##Param = mProcessor->getParameters()[paramName##PID]; \
+    const float paramName##Norm = paramName##Param->get();                      \
+    const float paramName##DB = paramName##Param                                \
         ->getNormalisableRange()                                                \
         .convertFrom0to1(paramName##Norm);                                      \
     const float paramName##Val = juce::Decibels::decibelsToGain(paramName##DB); \
@@ -21,7 +24,6 @@ using namespace invrm;
 
 Modulator::Modulator(PluginProcessor* p)
     : mProcessor(p)
-    , mParams(mProcessor->getParameters())
 {}
 Modulator::~Modulator() = default;
 
@@ -30,10 +32,30 @@ void Modulator::processBlock (const float* mainIn,
                               const float* side,
                               int length)
 {
-
     UNPACK_DECIBEL(PreGain);
+    //const int PreGainPID = static_cast<int>(param::PID::PreGain);
+    //const auto* PreGainParam = mProcessor->getParameters()[PreGainPID];
+    //const float PreGainNorm = PreGainParam->get();
+    //const float PreGainDB = PreGainParam
+    //    ->getNormalisableRange()
+    //    .convertFrom0to1(PreGainNorm);
+    //const float PreGainVal = juce::Decibels::decibelsToGain(PreGainDB);
+
     UNPACK_DECIBEL(Threshold);
+    //const int ThresholdPID = static_cast<int>(param::PID::Threshold);
+    //const float ThresholdNorm = params[ThresholdPID]->get();
+    //const float ThresholdDB = params[ThresholdPID]
+    //    ->getNormalisableRange()
+    //    .convertFrom0to1(ThresholdNorm);
+    //const float ThresholdVal = juce::Decibels::decibelsToGain(ThresholdDB);
+    
     UNPACK_PARAM(WetMix);
+    //const int WetMixPID = static_cast<int>(param::PID::WetMix);
+    //const auto* WetMixParam = mProcessor->getParameters()[WetMixPID];
+    //const float WetMixNorm = WetMixParam->get();
+    //const float WetMixVal = WetMixParam
+    //    ->getNormalisableRange()
+    //    .convertFrom0to1(WetMixNorm);
 
     for(int s = 0; s < length; s++)
     {

@@ -16,6 +16,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     for(auto& slider : mSliders)
     {
         addAndMakeVisible(slider.slider);
+        slider.slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 25);
     }
 
     invrm::VUBar::setUpdateFrequency(25);
@@ -61,7 +62,7 @@ void PluginEditor::resized()
     const int knobWidth = knobArea.getWidth() / invrm::param::numParams;
     for(int i = 0; i < invrm::param::numParams; i++)
     {
-        mSliders[i].slider.setBounds(knobArea.removeFromLeft(knobWidth));
+        mSliders[(size_t)i].slider.setBounds(knobArea.removeFromLeft(knobWidth));
     }
 
     mWaveformDisplay.setBounds(area.reduced(20));

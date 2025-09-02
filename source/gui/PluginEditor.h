@@ -12,11 +12,11 @@ struct AttachedSlider
     AttachedSlider(PluginProcessor& p, invrm::param::PID pid)
         : slider()
         , attachment(
-            *(p.getParameters()[(int)pid]),
+            *(p.getParameters()[(size_t)pid]),
             slider,
             nullptr
         )
-    {};
+    {}
 
     juce::Slider slider;
     juce::SliderParameterAttachment attachment;

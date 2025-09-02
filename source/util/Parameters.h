@@ -3,8 +3,8 @@
 #include "juce_audio_processors/juce_audio_processors.h"
 
 using APVTS = juce::AudioProcessorValueTreeState;
-using RAP = juce::RangedAudioParameter;
-using UniqueRapVector = std::vector<std::unique_ptr<RAP>>;
+using APF = juce::AudioParameterFloat;
+using UniqueApfVector = std::vector<std::unique_ptr<APF>>;
 
 namespace invrm::param
 {
@@ -26,6 +26,7 @@ inline juce::String toName(PID pid)
         case PID::PreGain : return "PreGain";
         case PID::Threshold : return "Threshold";
         case PID::WetMix : return "Dry/Wet Mix";
+        case PID::NumParams : ;
         default : return "error";
     }
 }
@@ -40,7 +41,7 @@ inline juce::String toId(PID pid)
     return toId(toName(pid));
 }
 
-inline void createParam(UniqueRapVector& vec, 
+inline void createParam(UniqueApfVector& vec, 
                         PID pid,
                         juce::NormalisableRange<float> range,
                         float defaultValue)
@@ -70,7 +71,7 @@ inline void createParam(UniqueRapVector& vec,
 
 inline APVTS::ParameterLayout CreateParameterLayout()
 {
-    UniqueRapVector params;
+    UniqueApfVector params;
 
     createParam(params, PID::PreGain, {-30.f, 30.f}, 0.f);
     createParam(params, PID::Threshold, {-80.f, 0.f}, 0.f);

@@ -42,11 +42,14 @@ public:
 
     float getBusLevel(int bus) const;
     const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
-    std::vector<RAP*>& getParameters() { return mParams; }
+    std::vector<APF*>& getParameters() 
+    { 
+        return mParams; 
+    }
 
 private:
     APVTS mApvts;
-    std::vector<RAP*> mParams;
+    std::vector<APF*> mParams;
 
     std::unique_ptr<invrm::Modulator> mModulator;
     std::atomic<std::array<float, 2>> mBusLevels;

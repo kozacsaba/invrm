@@ -1,7 +1,10 @@
 #pragma once
 
+#include "util/Parameters.h"
+
 #include "juce_audio_basics/juce_audio_basics.h"
-#include "proc/PluginProcessor.h"
+
+class PluginProcessor;
 
 namespace invrm
 {
@@ -25,7 +28,6 @@ public:
 
 private:
     PluginProcessor* mProcessor;
-    std::vector<RAP*>& mParams;
 
     juce::AudioBuffer<float> mFactorArray;
 

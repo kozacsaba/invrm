@@ -20,8 +20,10 @@ PluginProcessor::PluginProcessor()
 
     for(int i = 0; i < invrm::param::numParams; i++)
     {
-        juce::StringRef id = invrm::param::toId(invrm::param::PID(i));
-        mParams.push_back(mApvts.getParameter(id));
+        juce::String id = invrm::param::toId(invrm::param::PID(i));
+        juce::RangedAudioParameter* param = mApvts.getParameter(id);
+        jassert(param != nullptr);
+        mParams.push_back(static_cast<APF*>(param));
     }
 }
 PluginProcessor::~PluginProcessor()
