@@ -5,7 +5,10 @@
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p)
     , processorRef (p)
-    , mWaveformDisplay (processorRef.getWaveformBuffer())
+    , mWaveformDisplay (
+        processorRef.getWaveformBuffer(),
+        processorRef.getInputBuffer()
+    )
     , mSliders
     {
         AttachedSlider(p, invrm::param::PID::PreGain),

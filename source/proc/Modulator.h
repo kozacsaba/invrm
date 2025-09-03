@@ -22,14 +22,17 @@ public:
 
     void prepareToPlay(int maxBlockSize);
 
-    static void setPregain(float);
-    static void setThreshold(float);
     const juce::AudioBuffer<float>& getFactorArray() const { return mFactorArray; }
+    const juce::AudioBuffer<float>& getInputArray() const 
+    { 
+        return mInputArray; 
+    }
 
 private:
     PluginProcessor* mProcessor;
 
     juce::AudioBuffer<float> mFactorArray;
+    juce::AudioBuffer<float> mInputArray;
 
 };
 

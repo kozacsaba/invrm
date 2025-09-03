@@ -26,10 +26,10 @@ PluginProcessor::PluginProcessor()
         mParams.push_back(static_cast<APF*>(param));
     }
 }
+
 PluginProcessor::~PluginProcessor()
 {
 }
-
 
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -38,6 +38,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     mBusLevels = {0.f, 0.f};
     mWaveformBuffer.prepareToPlay(sampleRate);
+    mInputBuffer.prepareToPlay(sampleRate);
     mModulator->prepareToPlay(samplesPerBlock);
 }
 void PluginProcessor::releaseResources()
@@ -113,6 +114,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     }
 
     mWaveformBuffer.pushBuffer(mModulator->getFactorArray());
+    mInputBuffer.pushBuffer(mModulator->getInputArray());
 }
 
 
