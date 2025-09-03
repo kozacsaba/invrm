@@ -32,30 +32,20 @@ void Modulator::processBlock (const float* mainIn,
                               const float* side,
                               int length)
 {
-    UNPACK_DECIBEL(PreGain);
-    //const int PreGainPID = static_cast<int>(param::PID::PreGain);
-    //const auto* PreGainParam = mProcessor->getParameters()[PreGainPID];
-    //const float PreGainNorm = PreGainParam->get();
-    //const float PreGainDB = PreGainParam
-    //    ->getNormalisableRange()
-    //    .convertFrom0to1(PreGainNorm);
-    //const float PreGainVal = juce::Decibels::decibelsToGain(PreGainDB);
+    //UNPACK_DECIBEL(PreGain);
+    const int PreGainPID = static_cast<int>(param::PID::PreGain);
+    const float PreGainDB = mProcessor->getParameters()[PreGainPID]->get();
+    const float PreGainVal = juce::Decibels::decibelsToGain(PreGainDB);
 
-    UNPACK_DECIBEL(Threshold);
-    //const int ThresholdPID = static_cast<int>(param::PID::Threshold);
-    //const float ThresholdNorm = params[ThresholdPID]->get();
-    //const float ThresholdDB = params[ThresholdPID]
-    //    ->getNormalisableRange()
-    //    .convertFrom0to1(ThresholdNorm);
-    //const float ThresholdVal = juce::Decibels::decibelsToGain(ThresholdDB);
+    // UNPACK_DECIBEL(Threshold);
+    const int ThresholdPID = static_cast<int>(param::PID::Threshold);
+    const float ThresholdDB = mProcessor->getParameters()[ThresholdPID]->get();
+    const float ThresholdVal = juce::Decibels::decibelsToGain(ThresholdDB);
     
-    UNPACK_PARAM(WetMix);
-    //const int WetMixPID = static_cast<int>(param::PID::WetMix);
-    //const auto* WetMixParam = mProcessor->getParameters()[WetMixPID];
-    //const float WetMixNorm = WetMixParam->get();
-    //const float WetMixVal = WetMixParam
-    //    ->getNormalisableRange()
-    //    .convertFrom0to1(WetMixNorm);
+    //UNPACK_PARAM(WetMix);
+    const int WetMixPID = static_cast<int>(param::PID::WetMix);
+    const auto* WetMixParam = mProcessor->getParameters()[WetMixPID];
+    const float WetMixVal = WetMixParam->get();
 
     for(int s = 0; s < length; s++)
     {

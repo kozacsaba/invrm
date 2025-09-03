@@ -17,6 +17,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     {
         addAndMakeVisible(slider.slider);
         slider.slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 25);
+        addAndMakeVisible(slider.label);
     }
 
     invrm::VUBar::setUpdateFrequency(25);
@@ -32,6 +33,8 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     };
 
     addAndMakeVisible(mWaveformDisplay);
+    mWaveformDisplay.setThresholdParameter(
+        processorRef.getParameters()[(size_t)invrm::param::PID::Threshold]);
 
     setSize (400, 300);
 }
@@ -62,7 +65,9 @@ void PluginEditor::resized()
     const int knobWidth = knobArea.getWidth() / invrm::param::numParams;
     for(int i = 0; i < invrm::param::numParams; i++)
     {
-        mSliders[(size_t)i].slider.setBounds(knobArea.removeFromLeft(knobWidth));
+        auto panel = knobArea.removeFromLeft(knobWidth);
+        mSliders[(size_t)i].label.setBounds(panel.removeFromTop(30));
+        mSliders[(size_t)i].slider.setBounds(panel);
     }
 
     mWaveformDisplay.setBounds(area.reduced(20));

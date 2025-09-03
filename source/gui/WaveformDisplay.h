@@ -16,6 +16,7 @@ class WaveformDisplay
 public:
     WaveformDisplay(const WaveformBuffer& sourceBuffer)
         : buffer(sourceBuffer)
+        , thresholdParameter(nullptr)
     {
         min.resize((size_t)buffer.getNumPoints(), 0.0f);
         max.resize((size_t)buffer.getNumPoints(), 0.0f);
@@ -24,6 +25,11 @@ public:
     void timedUpdate() override
     {
         buffer.getData(min, max);
+        if(thresholdParameter)
+        {
+            const float thDB = thresholdParameter->get();
+            thresholdLevel = juce::Decibels::decibelsToGain(thDB);
+        }
         repaint();
     }
 
@@ -50,11 +56,36 @@ public:
 
             g.fillRect(juce::Rectangle<float>(initX, initY, rectW, rectH));
         }
+
+        if(thresholdParameter)
+        {
+            juce::Point<float> start = bounds.getBottomLeft().toFloat();
+            juce::Point<float> end = bounds.getBottomRight().toFloat();
+            
+            start.addXY(0.f, -thresholdLevel*(float)h);
+            end.addXY(0.f, -thresholdLevel*(float)h);
+
+            juce::Line<float> levelLine(start, end);
+            g.setColour(juce::Colours::red);
+            g.drawLine(levelLine, 3.f);
+        }
+    }
+
+    void setThresholdParameter(juce::AudioParameterFloat* param)
+    {
+        thresholdParameter = param;
+    }
+
+    juce::AudioParameterFloat* getThresholdParameter()
+    {
+        return thresholdParameter;
     }
 
 private:
     const WaveformBuffer& buffer;
     std::vector<float> min, max;
+    juce::AudioParameterFloat* thresholdParameter;
+    float thresholdLevel = 0.f;
 };
 
 }

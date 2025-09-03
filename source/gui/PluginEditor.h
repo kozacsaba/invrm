@@ -16,10 +16,13 @@ struct AttachedSlider
             slider,
             nullptr
         )
-    {}
+    {
+        label.setText(invrm::param::toName(pid), juce::dontSendNotification);
+    }
 
     juce::Slider slider;
     juce::SliderParameterAttachment attachment;
+    juce::Label label;
 };
 
 using AttachedSliderArray = std::array<AttachedSlider, invrm::param::numParams>;
