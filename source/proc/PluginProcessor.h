@@ -42,6 +42,7 @@ public:
 
     float getBusLevel(int bus) const;
     const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
+    const invrm::WaveformBuffer& getInputBuffer() const { return mInputBuffer; }
     std::vector<APF*>& getParameters() 
     { 
         return mParams; 
@@ -54,6 +55,7 @@ private:
     std::unique_ptr<invrm::Modulator> mModulator;
     std::atomic<std::array<float, 2>> mBusLevels;
     invrm::WaveformBuffer mWaveformBuffer;
+    invrm::WaveformBuffer mInputBuffer;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

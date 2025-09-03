@@ -22,6 +22,7 @@ public:
         jassert(samplesPerPoint > 0);
         reset();
     }
+    
     void reset()
     {
         std::fill(minValues.begin(), minValues.end(), 0.0f);
@@ -31,6 +32,7 @@ public:
         currentMin = std::numeric_limits<float>::max();
         currentMax = std::numeric_limits<float>::lowest();
     }
+
     void pushBuffer(const juce::AudioBuffer<float>& buffer)
     {
         const int numSamples = buffer.getNumSamples();
@@ -54,6 +56,7 @@ public:
             }
         }
     }
+
     void getData(std::vector<float>& outMin, std::vector<float>& outMax) const
     {
         for (size_t i = 0; i < (size_t)numPoints; ++i)
@@ -63,6 +66,7 @@ public:
             outMax[i] = maxValues[index];
         }
     }
+
     int getNumPoints() const { return numPoints; }
 
 private:
