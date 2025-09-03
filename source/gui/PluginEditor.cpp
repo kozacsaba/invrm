@@ -6,7 +6,20 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p)
     , processorRef (p)
     , mWaveformDisplay (processorRef.getWaveformBuffer())
+    , mSliders
+    {
+        AttachedSlider(p, invrm::param::PID::PreGain),
+        AttachedSlider(p, invrm::param::PID::Threshold),
+        AttachedSlider(p, invrm::param::PID::WetMix)
+    }
 {
+    for(auto& slider : mSliders)
+    {
+        addAndMakeVisible(slider.slider);
+        slider.slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 25);
+        addAndMakeVisible(slider.label);
+    }
+
     invrm::VUBar::setUpdateFrequency(25);
     addAndMakeVisible(mBarIn);
     mBarIn.query = [this]() -> float
@@ -20,6 +33,8 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     };
 
     addAndMakeVisible(mWaveformDisplay);
+    mWaveformDisplay.setThresholdParameter(
+        processorRef.getParameters()[(size_t)invrm::param::PID::Threshold]);
 
     setSize (400, 300);
 }
@@ -45,5 +60,15 @@ void PluginEditor::resized()
     auto area = getLocalBounds();
     mBarIn.setBounds(area.removeFromLeft(30));
     mBarOut.setBounds(area.removeFromRight(30));
+
+    auto knobArea = area.removeFromBottom(area.getHeight() / 3);
+    const int knobWidth = knobArea.getWidth() / invrm::param::numParams;
+    for(int i = 0; i < invrm::param::numParams; i++)
+    {
+        auto panel = knobArea.removeFromLeft(knobWidth);
+        mSliders[(size_t)i].label.setBounds(panel.removeFromTop(30));
+        mSliders[(size_t)i].slider.setBounds(panel);
+    }
+
     mWaveformDisplay.setBounds(area.reduced(20));
 }

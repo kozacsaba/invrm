@@ -9,12 +9,22 @@ PluginProcessor::PluginProcessor()
             .withOutput("Output", juce::AudioChannelSet::stereo(), true)
             .withInput("Sidechain", juce::AudioChannelSet::stereo(), false)
       )
-    , mModulator(std::make_unique<invrm::Modulator>())
+    , mApvts(*this, nullptr, "Parameters", invrm::param::CreateParameterLayout())
+    , mParams()
+    , mModulator(std::make_unique<invrm::Modulator>(this))
 {
 #if LOG_LEVEL > 2
     auto* logger = patch::FileLogger::getInstance();
     juce::ignoreUnused(logger);
 #endif
+
+    for(int i = 0; i < invrm::param::numParams; i++)
+    {
+        juce::String id = invrm::param::toId(invrm::param::PID(i));
+        juce::RangedAudioParameter* param = mApvts.getParameter(id);
+        jassert(param != nullptr);
+        mParams.push_back(static_cast<APF*>(param));
+    }
 }
 PluginProcessor::~PluginProcessor()
 {

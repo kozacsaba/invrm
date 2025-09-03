@@ -1,6 +1,10 @@
 #pragma once
 
+#include "util/Parameters.h"
+
 #include "juce_audio_basics/juce_audio_basics.h"
+
+class PluginProcessor;
 
 namespace invrm
 {
@@ -8,7 +12,7 @@ namespace invrm
 class Modulator
 {
 public:
-    Modulator();
+    Modulator(PluginProcessor* p);
     ~Modulator();
 
     void processBlock (const float* mainIn,
@@ -23,8 +27,8 @@ public:
     const juce::AudioBuffer<float>& getFactorArray() const { return mFactorArray; }
 
 private:
-    inline static float mPregain = 1.f;
-    inline static float mThreshold = 0.f;
+    PluginProcessor* mProcessor;
+
     juce::AudioBuffer<float> mFactorArray;
 
 };
