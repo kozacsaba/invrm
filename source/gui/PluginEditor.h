@@ -41,6 +41,7 @@ private:
     invrm::VUBar mBarIn;
     invrm::VUBar mBarOut;
     invrm::WaveformDisplay mWaveformDisplay;
+    juce::Slider mTimeSlider;
 
     AttachedSliderArray mSliders;
 
