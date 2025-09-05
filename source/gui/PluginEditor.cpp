@@ -25,8 +25,9 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     addAndMakeVisible(mTimeSlider);
     mTimeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    mTimeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 20, 20);
-    mTimeSlider.setMinAndMaxValues(50.0, 1000.0, juce::dontSendNotification);
+    mTimeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 30);
+    mTimeSlider.setRange(50.0, 1000.0);
+    mTimeSlider.setNumDecimalPlacesToDisplay(0);
     mTimeSlider.setValue(500.0, juce::dontSendNotification);
     mTimeSlider.onValueChange = [this]() 
     {
@@ -84,6 +85,6 @@ void PluginEditor::resized()
         mSliders[(size_t)i].slider.setBounds(panel);
     }
 
-    mTimeSlider.setBounds(area.removeFromLeft(20));
-    mWaveformDisplay.setBounds(area.reduced(20));
+    mTimeSlider.setBounds(area.removeFromLeft(40));
+    mWaveformDisplay.setBounds(area.reduced(7));
 }
