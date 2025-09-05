@@ -69,10 +69,16 @@ public:
 
     int getNumPoints() const { return numPoints; }
 
+    void setDisplayDuration(double inMs)
+    {
+        displayDurationMs = (float)inMs;
+        samplesPerPoint = static_cast<int>((sampleRate * displayDurationMs * 0.001) / numPoints);
+    }
+
 private:
     const int numPoints = 100;
     double sampleRate;
-    const float displayDurationMs = 500.f;
+    float displayDurationMs = 500.f;
     int samplesPerPoint;
 
     std::vector<float> minValues;

@@ -41,8 +41,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     float getBusLevel(int bus) const;
-    const invrm::WaveformBuffer& getWaveformBuffer() const { return mWaveformBuffer; }
-    const invrm::WaveformBuffer& getInputBuffer() const { return mInputBuffer; }
+    invrm::WaveformBuffer& getWaveformBuffer() { return mWaveformBuffer; }
+    invrm::WaveformBuffer& getInputBuffer() { return mInputBuffer; }
     std::vector<APF*>& getParameters() 
     { 
         return mParams; 

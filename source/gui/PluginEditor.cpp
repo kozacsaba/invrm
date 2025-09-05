@@ -23,6 +23,18 @@ PluginEditor::PluginEditor (PluginProcessor& p)
         addAndMakeVisible(slider.label);
     }
 
+    addAndMakeVisible(mTimeSlider);
+    mTimeSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    mTimeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 30);
+    mTimeSlider.setRange(50.0, 1000.0);
+    mTimeSlider.setNumDecimalPlacesToDisplay(0);
+    mTimeSlider.setValue(500.0, juce::dontSendNotification);
+    mTimeSlider.onValueChange = [this]() 
+    {
+        processorRef.getInputBuffer().setDisplayDuration(mTimeSlider.getValue());
+        processorRef.getWaveformBuffer().setDisplayDuration(mTimeSlider.getValue());
+    };
+
     invrm::VUBar::setUpdateFrequency(25);
     addAndMakeVisible(mBarIn);
     mBarIn.query = [this]() -> float
@@ -73,5 +85,6 @@ void PluginEditor::resized()
         mSliders[(size_t)i].slider.setBounds(panel);
     }
 
-    mWaveformDisplay.setBounds(area.reduced(20));
+    mTimeSlider.setBounds(area.removeFromLeft(40));
+    mWaveformDisplay.setBounds(area.reduced(7));
 }
