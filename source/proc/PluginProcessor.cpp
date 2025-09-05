@@ -113,8 +113,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         mModulator->processBlock(pin, pout, pside, len);
     }
 
-    mWaveformBuffer.pushBuffer(mModulator->getFactorArray());
-    mInputBuffer.pushBuffer(mModulator->getInputArray());
+    mWaveformBuffer.pushBuffer(mModulator->getFactorArray(), len);
+    mInputBuffer.pushBuffer(mModulator->getInputArray(), len);
 }
 
 
