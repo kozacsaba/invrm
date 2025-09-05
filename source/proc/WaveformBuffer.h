@@ -33,9 +33,13 @@ public:
         currentMax = std::numeric_limits<float>::lowest();
     }
 
-    void pushBuffer(const juce::AudioBuffer<float>& buffer)
+    void pushBuffer(const juce::AudioBuffer<float>& buffer, int usedLength)
     {
-        const int numSamples = buffer.getNumSamples();
+        // usedLength is needed only because some DAWs do not work with constant sized buffers.
+        // Each process block could potentionally be called on different sized buffers, and thus
+        // we cannot rely on the maximum size (which the modulator class gives us)
+
+        const int numSamples = usedLength;
         const float* channelData = buffer.getReadPointer(0);
 
         for (int i = 0; i < numSamples; ++i)
